@@ -63,27 +63,27 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     return  Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-
+      appBar:AppBar(
+         automaticallyImplyLeading: false,
         backgroundColor: Colors.yellow[900],
         title: Row(
           children: [
             Container(
-                height: 30,
-                width: 30,
+                  height: 30,
+                  width: 30,
                   decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(15),
                   // shape: BoxShape.circle,
-                    image: DecorationImage(
+                    image: const DecorationImage(
                     fit: BoxFit.fill,
-                    image: NetworkImage('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQhG6ddRd1zgz6IrQ5ZKZL5EBHOvrnac3gxTQ&usqp=CAU',)
-                  )
+                    image:AssetImage('assets/img.png'),
+                    )
                 ),
             ),
-            const SizedBox(width: 20,),
+            const SizedBox(width: 5,),
             Flexible(
               child: Text("MessagingMe",style:GoogleFonts.montserrat(
-                  color: Colors.white,fontSize: 24,fontWeight: FontWeight.bold
+                  color: Colors.white,fontSize: 22,fontWeight: FontWeight.bold
               ),),
             ),
 
@@ -106,7 +106,7 @@ class _ChatScreenState extends State<ChatScreen> {
           StreamBuilder<QuerySnapshot>(
               stream: _fireStore.collection('messages').orderBy('time').snapshots(),
               builder: (context,snapshot){
-                 List<messageWidgetST> messageWidgets =[];
+                 List<MessageWidgetST> messageWidgets =[];
                  if(!snapshot.hasData){
                   return const Center(
                     child: CircularProgressIndicator(
@@ -119,7 +119,8 @@ class _ChatScreenState extends State<ChatScreen> {
                    final messageText= m.get('text');
                    final messageSender=m.get('sender');
                    final currentUser= signInUser.email;
-                   final messageWidget= messageWidgetST(mT: messageText,mS: messageSender, isMe:currentUser==messageSender ,);
+                   // final  messageTime=DateTime.now()  ;
+                   final messageWidget= MessageWidgetST(mT: messageText,mS: messageSender, isMe:currentUser==messageSender  );
 
                    messageWidgets.add(messageWidget);
                  }
@@ -132,11 +133,18 @@ class _ChatScreenState extends State<ChatScreen> {
 
               }),
           Container(
-            decoration: BoxDecoration(
+              decoration: BoxDecoration(
+              boxShadow:[
+               BoxShadow(
+                 blurRadius: 2,
+                 color: Colors.grey.shade100,
+
+               )
+             ],
               border: Border(
                 top: BorderSide(
                   color: Colors.yellow.shade800
-                )
+                ),
               )
           ),
             child: Row(
@@ -145,49 +153,22 @@ class _ChatScreenState extends State<ChatScreen> {
                   child: TextField(
                     controller: textEditingController,
                     onChanged: (value){
-                      // textEditingController!.text =value;
                       message=value;
                     },
-                    decoration: InputDecoration(
-                      hintText: "Write message here...",
-                      // border: const OutlineInputBorder(
-                      //   borderRadius: BorderRadius.only(topLeft:Radius.circular(5),
-                      //       // topRight: Radius.circular(5)
-                      //   ),
-                      // ),
-                      // enabledBorder:OutlineInputBorder(
-                      //   borderSide: BorderSide(color: Colors.yellow.shade800),
-                      //   borderRadius: const BorderRadius.only(topLeft:Radius.circular(5),
-                      //       // topRight: Radius.circular(5)
-                      //   ),
-                      // ),
-                      // focusedBorder: OutlineInputBorder(
-                      //   borderSide: BorderSide(color: Colors.blue.shade800),
-                      //   borderRadius: const BorderRadius.only(topLeft:Radius.circular(5),
-                      //       // topRight: Radius.circular(5)
-                      //   ),
-                      // ),
-                    ),
+                      decoration: const InputDecoration(
+                        contentPadding: EdgeInsets.symmetric(horizontal: 15),
+                      hintText: "Write message here...",),
                   ),
                 ),
                 TextButton(
-                  // style: ButtonStyle(
-                  //   backgroundColor: MaterialStateColor.resolveWith((states) => Colors.blue.shade800),
-                  //   elevation: MaterialStateProperty.resolveWith((states) => 4),
-                  //   iconSize:MaterialStateProperty.resolveWith((states) => 50),
-                  //   minimumSize: MaterialStateProperty.resolveWith((states) =>Size(80, 60)),
-                  //
-                  // ),
-
                   onPressed: (){
-                    print(textEditingController.text);
+                    // print(textEditingController.text);
                     textEditingController.clear();
                     _fireStore.collection('messages').add({
                       'text':message,
                       'sender':signInUser.email,
                       'time': FieldValue.serverTimestamp(),
                     }
-
                     );
                   },
                   child: Text('Send',style: GoogleFonts.montserrat(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.blue.shade800),))
@@ -201,15 +182,16 @@ class _ChatScreenState extends State<ChatScreen> {
 }
 
 
-class messageWidgetST extends StatelessWidget {
-   const messageWidgetST({ this.mS, this.mT,Key? key, required this.isMe}) : super(key: key);
+class MessageWidgetST extends StatelessWidget {
+   const MessageWidgetST({ this.mS, this.mT,Key? key, required this.isMe}) : super(key: key);
     final  String? mT;
     final  String? mS;
+    // final DateTime? mTime;
     final bool isMe;
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(15.0),
+      padding: const EdgeInsets.all(10.0),
       child: Column(
         crossAxisAlignment: isMe? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
@@ -222,12 +204,16 @@ class messageWidgetST extends StatelessWidget {
               color:isMe? Colors.blue.shade800 : Colors.white,
               borderRadius: isMe?
               const BorderRadius.only(topLeft: Radius.circular(25),bottomRight: Radius.circular(10)
-              ): const BorderRadius.only(topRight: Radius.circular(25),bottomRight: Radius.circular(10)
+              ): const BorderRadius.only(topRight: Radius.circular(25),bottomLeft: Radius.circular(10)
               ),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 10),
                 child: Text('$mT ',style: TextStyle( color: isMe? Colors.white: Colors.black),),
               )),
+          // Padding(
+          //   padding: const EdgeInsets.all(2.0),
+          //   child: Text('$mTime',style: TextStyle( color:isMe? Colors.black45: Colors.black12,),),
+          // ),
         ],
       ),
     );

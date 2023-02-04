@@ -1,10 +1,7 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
-import 'package:chat/screens/chat_screen.dart';
 import 'package:chat/screens/register_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import '../widgets/app_button.dart';
 import 'login.dart';
 
@@ -20,15 +17,15 @@ class WelcomeScreen extends StatefulWidget {
 
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
-  @override
-  void initState() {
-    FirebaseAuth.instance.authStateChanges().listen((user) {
-      if(user !=null){
-        Navigator.pushNamedAndRemoveUntil(context, ChatScreen.id, (route) => false)   ;   }
-    });
-    // TODO: implement initState
-    super.initState();
-  }
+  // @override
+  // void initState() {
+  //   // FirebaseAuth.instance.authStateChanges().listen((user) {
+  //   //   if(user !=null){
+  //   //     Navigator.pushNamedAndRemoveUntil(context, ChatScreen.id, (route) => false)   ;   }
+  //   // });
+  //   // TODO: implement initState
+  //   super.initState();
+  // }
   Widget build(BuildContext context) {
     return  Scaffold(
       backgroundColor: Colors.white,
@@ -39,7 +36,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Image.network('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQhG6ddRd1zgz6IrQ5ZKZL5EBHOvrnac3gxTQ&usqp=CAU'),
+              Image.asset('assets/img.png'),
               AnimatedTextKit(
                 animatedTexts: [
                   TypewriterAnimatedText(
@@ -56,9 +53,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 displayFullTextOnTap: true,
                 stopPauseOnTap: true,
               ),
-              // Text("MessagingMe App",style:GoogleFonts.montserrat(
-              //     color: Colors.black,fontSize: 24,fontWeight: FontWeight.bold
-              // ),),
               const SizedBox(height: 40,),
               AppButton(color: Colors.yellow.shade900, title: 'Sign In', onPressed: () { Navigator.pushNamed(context, LoginScreen.id); },),
               const SizedBox(height: 20,),

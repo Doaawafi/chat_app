@@ -1,14 +1,10 @@
 import 'package:chat/screens/chat_screen.dart';
+import 'package:chat/screens/register_screen.dart';
 import 'package:chat/widgets/app_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-
-
 import '../constants.dart';
-import '../widgets/text_field_app.dart';
 
 
 class LoginScreen extends StatefulWidget {
@@ -36,16 +32,14 @@ class _LoginScreenState extends State<LoginScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Image.network('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQhG6ddRd1zgz6IrQ5ZKZL5EBHOvrnac3gxTQ&usqp=CAU'),
+            Image.asset('assets/img.png'),
             const SizedBox(height: 25,),
             TextField(
               keyboardType: TextInputType.emailAddress,
 
               onChanged: (value) {
                 email=value;
-
-                //Do something with the user input.
-              },
+                },
               decoration:
               kTextFieldDecoration.copyWith(hintText: 'Enter your Email'),
             ),
@@ -83,6 +77,20 @@ class _LoginScreenState extends State<LoginScreen> {
                     print(e);
                   }
                 }),
+            const SizedBox(height: 10,),
+            Flexible(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 18),
+                child: Row(crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                  Text( "Don't Have An Account ?",style: TextStyle(color: Colors.grey.shade800,fontSize: 16,fontWeight: FontWeight.bold)),
+                  TextButton(onPressed: (){
+                    Navigator.pushNamed(context, RegisterScreen.id);
+                  }, child: Text("Create Account!",style: TextStyle(color: Colors.blue.shade800,decoration:TextDecoration.underline,fontSize: 15,fontWeight: FontWeight.bold)))
+                ],),
+              ),
+            ),
+
 
           ],
         ),

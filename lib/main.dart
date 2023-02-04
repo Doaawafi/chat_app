@@ -2,6 +2,7 @@ import 'package:chat/screens/chat_screen.dart';
 import 'package:chat/screens/login.dart';
 import 'package:chat/screens/register_screen.dart';
 import 'package:chat/screens/welcom_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -13,6 +14,7 @@ void main() async{
   );
   runApp(const MyApp());
 }
+FirebaseAuth _auth =FirebaseAuth.instance;
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -22,7 +24,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: WelcomeScreen.id,
+      initialRoute: _auth.currentUser !=null? ChatScreen.id: WelcomeScreen.id,
       routes: {
         WelcomeScreen.id:(context) => const WelcomeScreen(),
         LoginScreen.id:(context) => const LoginScreen(),

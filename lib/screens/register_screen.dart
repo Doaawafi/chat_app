@@ -1,9 +1,8 @@
 import 'package:chat/screens/chat_screen.dart';
+import 'package:chat/screens/login.dart';
 import 'package:flutter/material.dart';
-
 import '../constants.dart';
 import '../widgets/app_button.dart';
-import '../widgets/text_field_app.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
@@ -20,7 +19,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   String? email;
   String? password;
   bool showSpinner=false;
-  FirebaseAuth _auth =FirebaseAuth.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   void getLoginState() {
     FirebaseAuth.instance.authStateChanges().listen((User? user) {
       if (user == null) {
@@ -46,16 +45,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Image.network('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQhG6ddRd1zgz6IrQ5ZKZL5EBHOvrnac3gxTQ&usqp=CAU'),
+              Image.asset('assets/img.png'),
               const SizedBox(height: 25,),
               TextField(
                 keyboardType: TextInputType.emailAddress,
 
                 onChanged: (value) {
                   email=value;
-
-                  //Do something with the user input.
-                },
+                  },
                 decoration:
                 kTextFieldDecoration.copyWith(hintText: 'Enter your Email'),
               ),
@@ -64,7 +61,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 obscureText: true,
                 onChanged: (value) {
                   password=value;
-                  //Do something with the user input.
                 },
                 decoration: kTextFieldDecoration.copyWith(
                     hintText: 'Enter your password'),
@@ -113,6 +109,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                 },
               ),
+              const SizedBox(height: 10,),
+              Flexible(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 65),
+                  child: Row(crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text( "Have An Account ?",style: TextStyle(color: Colors.grey.shade800,fontSize: 16,fontWeight: FontWeight.bold)),
+                      TextButton(onPressed: (){
+                        Navigator.pushNamed(context, LoginScreen.id);
+                      }, child: Text("LogIn!",style: TextStyle(color: Colors.yellow.shade800,decoration:TextDecoration.underline,fontSize: 15,fontWeight: FontWeight.bold)))
+                    ],),
+                ),
+              ),
+
 
             ],
           ),
