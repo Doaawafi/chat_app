@@ -40,7 +40,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       body: ModalProgressHUD(
         inAsyncCall: showSpinner,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 45),
+          padding: const EdgeInsets.symmetric(horizontal: 15),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -54,7 +54,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   email=value;
                   },
                 decoration:
-                kTextFieldDecoration.copyWith(hintText: 'Enter your Email'),
+                kTextFieldDecoration.copyWith(hintText: 'Enter your Email',prefixIcon: Icon(Icons.email)),
               ),
               const SizedBox(height: 12,),
               TextField(
@@ -63,7 +63,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   password=value;
                 },
                 decoration: kTextFieldDecoration.copyWith(
-                    hintText: 'Enter your password'),
+                    hintText: 'Enter your password',prefixIcon: Icon(Icons.lock)),
               ),
               const SizedBox(height: 30,),
               AppButton(color: Colors.blue.shade800, title: 'Register',
@@ -72,55 +72,85 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   showSpinner=true;
 
                 });
+                try{
                   if(email !=null && password!=null){
-                    try{
-                      final newUser=await _auth.createUserWithEmailAndPassword(email: email!, password: password!);
+                      final newUser=await _auth.createUserWithEmailAndPassword(email: email!.trim(), password: password!);
                       if(newUser.user !=null && mounted){
                         Navigator.pushNamed(context, ChatScreen.id);
                         ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              content: const Text('logged in'),
-                              duration: const Duration(seconds: 1),
+                              dismissDirection: DismissDirection.horizontal,
+                              backgroundColor: Colors.blue.shade300,
+                              content: const Text(' Your logged in',style: TextStyle(color: Colors.white),),
+                              duration: const Duration(seconds: 3),
 
                             ));
+                        setState(() {
+                          showSpinner=true;
+
+                        });
+                         }
+                      else{
                         setState(() {
                           showSpinner=false;
 
                         });
-                         }else{
                         ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: const Text('Error'),
-                              duration: const Duration(seconds: 1),
-                              // action: SnackBarAction(
-                              //       label: 'ACTION',
-                              //           onPressed: () { },)
+                            const SnackBar(
+                              content: Text('Enter required data'),
+                              duration: Duration(seconds: 1),
                             ));
-                      }}
-                    catch(e){
-                      ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content:  Text(e.toString()),
-                            duration: const Duration(seconds: 1),
 
-                          ));
-                    }
+                      }}
+                  else{
+                    setState(() {
+                      showSpinner=false;
+
+                    });
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          dismissDirection: DismissDirection.horizontal,
+                          backgroundColor: Colors.red,
+                          content: Text('Please Enter Required Data !!',style: TextStyle(color: Colors.white),),
+                          duration: Duration(seconds: 3),
+
+                        ));
                   }
+
+                  }
+                  catch(e){
+                    setState(() {
+                      showSpinner=false;
+
+                    });
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content:  Text(e.toString()),
+                        duration: const Duration(seconds: 5),
+
+                      ));
+                  setState(() {
+                    showSpinner=false;
+
+                  });
+                }
 
                 },
               ),
               const SizedBox(height: 10,),
               Flexible(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 65),
-                  child: Row(crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text( "Have An Account ?",style: TextStyle(color: Colors.grey.shade800,fontSize: 16,fontWeight: FontWeight.bold)),
-                      TextButton(onPressed: (){
-                        Navigator.pushNamed(context, LoginScreen.id);
-                      }, child: Text("LogIn!",style: TextStyle(color: Colors.yellow.shade800,decoration:TextDecoration.underline,fontSize: 15,fontWeight: FontWeight.bold)))
-                    ],),
-                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 30),
+                      child: Text("Have An Account ?",style: TextStyle(color: Colors.grey.shade800,fontSize: 16,fontWeight: FontWeight.bold)),
+                    ),
+                    TextButton(onPressed: (){
+                      Navigator.pushNamed(context, LoginScreen.id);
+                    }, child: Text("LogIn!",style: TextStyle(color: Colors.yellow.shade800,decoration:TextDecoration.underline,fontSize: 15,fontWeight: FontWeight.bold)))
+                  ],),
               ),
 
 
