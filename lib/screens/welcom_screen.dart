@@ -54,9 +54,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 stopPauseOnTap: true,
               ),
               const SizedBox(height: 40,),
-              AppButton(color: Colors.yellow.shade900, title: 'Sign In', onPressed: () { Navigator.pushNamed(context, LoginScreen.id); },),
+              AppButton(color: Colors.yellow.shade900, title: 'Sign In', onPressed: () { Navigator.pushReplacementNamed(context, LoginScreen.id); },),
               const SizedBox(height: 20,),
-              AppButton(color: Colors.blue.shade900, title: 'Sign Up', onPressed: () { Navigator.pushNamed(context, RegisterScreen.id); },),
+              AppButton(color: Colors.blue.shade900, title: 'Sign Up', onPressed: () { Navigator.pushReplacementNamed(context, RegisterScreen.id); },),
 
             ],
           ),
