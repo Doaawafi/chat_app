@@ -56,7 +56,7 @@ class _ChatScreenState extends State<ChatScreen> {
   void sendNotification(String title, String body) async {
     http.Response response = await http.post(
       Uri.parse(
-          'https://fcm.googleapis.com/v1/projects/chatapp-97e6e/messages:send'),
+          'https://fcm.googleapis.com/v1/projects/messageme-app-a33a1/messages:send'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
@@ -73,7 +73,7 @@ class _ChatScreenState extends State<ChatScreen> {
   }
   Future<AccessToken> getAccessToken() async {
     final serviceAccount = await rootBundle.loadString(
-        'assets/chatapp-97e6e-firebase-adminsdk-bjwg6-15dbc5f965.json');
+        'assets/messageme-app-a33a1-firebase-adminsdk-2os9j-b6f91f9163.json');
     final data = await json.decode(serviceAccount);
     print(data);
     final accountCredentials = ServiceAccountCredentials.fromJson({
